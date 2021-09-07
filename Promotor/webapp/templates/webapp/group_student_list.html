@@ -1,0 +1,17 @@
+{% if group_students_list.count == 0 %}
+    <h1>No students in the group.</h1>
+    {% else %}
+
+{% for student in group_students_list %}
+
+ <div class="content">
+      <h3>{{ student.name }}</h3>
+      <p><i class="far fa-user"></i> Username: {{ student.user.username }}</p>
+      <p><i class="fal fa-user-tag"></i> index.: {{ student.index }}</p>
+      <p><i class="far fa-envelope-open-text"></i> Email ID: {{ student.email }}</p>
+
+    </div>
+
+
+  {% endfor %}
+{% endif %}

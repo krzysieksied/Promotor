@@ -1,0 +1,14 @@
+{% extends 'webapp/base.html' %}
+{% load static %}
+{% block content %}
+
+
+      <h1>{{ student.name }}</h1>
+      <br>
+      <p> Username: {{ student.user.username }}</p>
+      <p> Roll No.: {{ student.index }}</p>
+      <p> Email ID: {{ student.email }}</p>
+
+
+
+{% endblock %}
