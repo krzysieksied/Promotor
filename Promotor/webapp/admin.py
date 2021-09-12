@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models import Student, Teacher, Group, StudentMessage, ProfilUser
+from .models import Student, Teacher, Group, StudentMessage, ProfilUser, ThreadModel
 
 
 # Register your models here.
@@ -39,3 +39,4 @@ admin.site.register(Student, StudentAdmin)
 admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(ProfilUser,ProfilUserAdmin)
 admin.site.register(Group, GroupAdmin)
+admin.site.register(ThreadModel)

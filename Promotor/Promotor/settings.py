@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'webapp.ProfilUser'
+#AUTH_USER_MODEL = 'webapp.ProfilUser'
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'webapp',
     'bootstrap4',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [

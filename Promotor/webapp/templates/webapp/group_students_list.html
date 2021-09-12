@@ -1,0 +1,46 @@
+{% extends "webapp/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="student-list">
+<div class="container">
+
+  <div class="row">
+  {% for student in group_students_list %}
+  <div class="col-6 col-md-4">
+  <div class="student-box">
+    <div class="imgBx">
+      {% if forloop.counter0|divisibleby:"2" %}
+      <img src="{% static 'images/login-avatar.PNG' %}" alt="">
+      {% else %}
+      <img src="{% static 'images/login-avatar-2.PNG' %}" alt="">
+      {% endif %}
+
+    </div>
+    <div class="content">
+      <h3>{{ student.name }}</h3>
+      <p><i class="far fa-user"></i> Username: {{ student.user }}</p>
+      <p><i class="fas fa-books"></i> index.: {{ student.index }}</p>
+      <p><i class="far fa-envelope-open-text"></i> Email ID: {{ student.email }}</p>
+      <a href="{% url 'webapp:student_message' pk=student.pk %}"><p class="add-button">Message</p> </a>
+    </div>
+  </div>
+  </div>
+  {% endfor %}
+  </div>
+</div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
