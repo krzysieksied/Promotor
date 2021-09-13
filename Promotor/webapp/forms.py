@@ -41,7 +41,7 @@ class ThreadForm(forms.Form):
 
 class MessagesForm(forms.Form):
     message = forms.CharField(label='', max_length=1000)
-    file = forms.FileField()
+    file = forms.FileField(required=False)
 
 class NoticeForm(forms.ModelForm):
     class Meta:
