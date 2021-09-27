@@ -43,7 +43,14 @@ class MessagesForm(forms.Form):
     message = forms.CharField(label='', max_length=1000)
     file = forms.FileField(required=False)
 
+
 class NoticeForm(forms.ModelForm):
     class Meta:
         model = GroupNotice
         fields = ['message']
+
+
+class StudentProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = ['thesis']

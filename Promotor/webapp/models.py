@@ -44,6 +44,7 @@ class Student(models.Model):
     index = models.IntegerField()
     email = models.EmailField(max_length=254)
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.DO_NOTHING, related_name='students')
+    thesis = models.CharField(max_length=250)
 
     # thesis = models.FileField(upload_to='uploads', null=True, blank=True)
 
@@ -66,6 +67,14 @@ class StudentMessage(models.Model):
 
 # class Meta:
 #    unique_together = ('teacher', 'student')
+class Notification(models.Model):
+    notification_type = models.IntegerField()
+    to_user = models.ForeignKey(User, related_name='notification_to', on_delete=models.CASCADE, null=True)
+    from_user = models.ForeignKey(User, related_name='notification_from', on_delete=models.CASCADE, null=True)
+    thread = models.ForeignKey('ThreadModel', on_delete=models.CASCADE, related_name='+', blank=True, null=True)
+    date = models.DateTimeField(default=timezone.now)
+    user_has_seen = models.BooleanField(default=False)
+
 
 class ThreadModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')

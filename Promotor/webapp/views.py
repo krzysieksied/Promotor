@@ -9,10 +9,15 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView
 from django.contrib.auth.models import User
+from django.http import FileResponse
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
 
 from . import models
-from .forms import UserForm, ThreadForm, MessagesForm, NoticeForm
-from .models import Group, Student, ThreadModel, MessageModel
+from .forms import UserForm, ThreadForm, MessagesForm, NoticeForm, StudentProfileUpdateForm
+from .models import Group, Student, ThreadModel, MessageModel, Notification
 
 
 def user_login(request):
@@ -43,7 +48,6 @@ class StudentDetailView(LoginRequiredMixin, DetailView):
     template_name = 'webapp/student_detail_page.html'
 
 
-## User Profile for teacher.
 class TeacherDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "teacher"
     model = models.Teacher
@@ -55,10 +59,11 @@ def user_logout(request):
     return HttpResponseRedirect(reverse('home'))
 
 
-def group_students_list(request):
+@login_required
+def group_students_list(request, pk):
     query = request.GET.get("q", None)
-
-    teacher_group = Group.objects.filter(teacher=request.user.profile.Teacher).first()
+    teacher_group = get_object_or_404(models.Group, pk=pk)
+    # teacher_group = Group.objects.filter(teacher=request.user.profile.Teacher).first()
     students_list = [student for student in teacher_group.students.all()]
     qs = Student.objects.all()
     if query is not None:
@@ -76,6 +81,11 @@ def group_students_list(request):
     }
     template = "webapp/group_students_list.html"
     return render(request, template, context)
+
+
+def group_list(request):
+    teacher_group = Group.objects.filter(teacher=request.user.profile.Teacher).all()
+    return render(request, 'webapp/teacher_group.html', {'teacher_group': teacher_group})
 
 
 class ClassStudentsListView(LoginRequiredMixin, DetailView):
@@ -162,9 +172,12 @@ class CreateMessage(View):
         )
 
         message.save()
+        notification = Notification.objects.create(notification_type=4, from_user=request.user, to_user=receiver,
+                                                   thread=thread)
         return redirect('webapp:thread', pk=pk)
 
 
+@login_required
 def StudentMessage(request, pk):
     student = get_object_or_404(models.Student, pk=pk)
     receiver = User.objects.get(username=student.user)
@@ -177,10 +190,18 @@ def StudentMessage(request, pk):
 
 
 @login_required
-def add_notice(request):
+def Student2Message(request):
+    if ThreadModel.objects.filter(receiver=request.user).exists():
+        thread = ThreadModel.objects.filter(receiver=request.user)[0]
+        return redirect('webapp:thread', pk=thread.pk)
+
+
+@login_required
+def add_notice(request, pk):
     notice_sent = False
     teacher = request.user.profile.Teacher
-    teacher_group = Group.objects.filter(teacher=request.user.profile.Teacher).first()
+    teacher_group = get_object_or_404(models.Group, pk=pk)
+    # teacher_group = Group.objects.filter(teacher=request.user.profile.Teacher).first()
     students_list = [student for student in teacher_group.students.all()]
 
     if request.method == "POST":
@@ -195,7 +216,75 @@ def add_notice(request):
         notice = NoticeForm()
     return render(request, 'webapp/write_notice.html', {'notice': notice, 'notice_sent': notice_sent})
 
+
 @login_required
 def group_notice(request, pk):
     student = get_object_or_404(models.Student, pk=pk)
     return render(request, 'webapp/group_notice_list.html', {'student': student})
+
+
+def StudentUpdateView(request, pk):
+    profile_updated = False
+    student = get_object_or_404(models.Student, pk=pk)
+    if request.method == "POST":
+        form = StudentProfileUpdateForm(request.POST, instance=student)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.save()
+            profile_updated = True
+    else:
+        form = StudentProfileUpdateForm(request.POST or None, instance=student)
+    return render(request, 'webapp/student_update.html', {'profile_updated': profile_updated, 'form': form})
+
+
+def thesis_pdf(request, pk):
+    teacher_group = get_object_or_404(models.Group, pk=pk)
+    students_list = [student for student in teacher_group.students.all()]
+    buf = io.BytesIO()
+
+    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+
+    textob = c.beginText()
+    textob.setTextOrigin(inch, inch)
+    textob.setFont("Helvetica", 14)
+
+    lines = []
+
+    for student in students_list:
+        lines.append(student.name)
+        lines.append(student.thesis)
+        lines.append(" ")
+
+    # Loop
+    for line in lines:
+        textob.textLine(line)
+
+    # Finish Up
+    c.drawText(textob)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+
+    # Return something
+    return FileResponse(buf, as_attachment=True, filename='thesis.pdf')
+
+
+class ThreadNotification(View):
+    def get(self, request, notification_pk, object_pk, *args, **kwargs):
+        notification = Notification.objects.get(pk=notification_pk)
+        thread = ThreadModel.objects.get(pk=object_pk)
+
+        notification.user_has_seen = True
+        notification.save()
+
+        return redirect('webapp:thread', pk=object_pk)
+
+
+class RemoveNotification(View):
+    def delete(self, request, notification_pk, *args, **kwargs):
+        notification = Notification.objects.get(pk=notification_pk)
+
+        notification.user_has_seen = True
+        notification.save()
+
+        return HttpResponse('Success', content_type='text/plain')

@@ -3,12 +3,25 @@
 {% block content %}
 
 
+<div class="profile">
+  <img src="{% static 'images/profile-background-3.PNG' %}" alt="">
+  <div class="profile-box">
+    {% if student.student_profile_pic %}
+      <img src="{{ student.student_profile_pic.url }}">
+    {% else %}
+      <img src="{% static 'images/login-avatar.PNG' %}" alt="">
+    {% endif %}
+    <div class="profile-details">
       <h1>{{ student.name }}</h1>
       <br>
-      <p> Username: {{ student.user}}</p>
-      <p> Roll No.: {{ student.index }}</p>
-      <p> Email ID: {{ student.email }}</p>
-  <!--  <p> Thesis: <a href="{{ student.thesis.url  }}">{{ student.thesis }}</a></p>-->
+      <p><i class="far fa-user"></i> Username: {{ student.user }}</p>
+      <p><i class="fal fa-user-tag"></i> Nr Albumu.: {{ student.index }}</p>
+      <p><i class="far fa-phone"></i> telefon: {{ student.phone }}</p>
+      <p><i class="far fa-envelope-open-text"></i> Email ID: {{ student.email }}</p>
+      <p><i class="fas fa-books"></i>Temta pracy : {{student.thesis}}</p>
+    </div>
+  </div>
+</div>
 
 
 

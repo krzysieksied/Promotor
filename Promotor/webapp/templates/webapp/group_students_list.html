@@ -22,7 +22,9 @@
       <p><i class="far fa-user"></i> Username: {{ student.user }}</p>
       <p><i class="fas fa-books"></i> index.: {{ student.index }}</p>
       <p><i class="far fa-envelope-open-text"></i> Email ID: {{ student.email }}</p>
-      <a href="{% url 'webapp:student_message' pk=student.pk %}"><p class="add-button">Message</p> </a>
+      <a href="{% url 'webapp:student_message' pk=student.pk %}"><p class="add-button">Wyślij wiadomość</p> </a>
+      <p>Temat pracy: {{ student.thesis }}</p>
+      <a href="{% url 'webapp:student_update' pk=student.pk %}"><p class="add-button"> zmień temat</p></a>
     </div>
   </div>
   </div>
