@@ -18,7 +18,7 @@ class ProfilUser(models.Model):
 
 class Teacher(models.Model):
     user = models.OneToOneField(ProfilUser, on_delete=models.CASCADE, primary_key=True, related_name='Teacher')
-    name = models.CharField(max_length=250)
+   # name = models.CharField(max_length=250)
     email = models.EmailField(max_length=254)
 
     # messages = models.ManyToManyField(Student, through='StudentMessage')
@@ -26,8 +26,8 @@ class Teacher(models.Model):
     def get_absolute_url(self):
         return reverse('webapp:teacher_detail', kwargs={'pk': self.pk})
 
-    def __str__(self):
-        return self.name
+    #def __str__(self):
+     #   return self.name
 
 
 class Group(models.Model):
@@ -40,7 +40,7 @@ class Group(models.Model):
 
 class Student(models.Model):
     user = models.OneToOneField(ProfilUser, on_delete=models.CASCADE, primary_key=True, related_name='Student')
-    name = models.CharField(max_length=250)
+    #name = models.CharField(max_length=250)
     index = models.IntegerField()
     email = models.EmailField(max_length=254)
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.DO_NOTHING, related_name='students')
@@ -51,8 +51,8 @@ class Student(models.Model):
     def get_absolute_url(self):
         return reverse('webapp:student_detail', kwargs={'pk': self.pk})
 
-    def __str__(self):
-        return self.name
+    #def __str__(self):
+     #   return self.name
 
 
 class StudentMessage(models.Model):

@@ -5,11 +5,13 @@
 
 
  {% for group in teacher_group %}
-<div>
+<div class="container">
+    <div class="jumbotron">
     <h3>{{ group.name }}</h3>
 <a href="{% url 'webapp:group_student_list' pk=group.pk %}"><p class="add-button">Lista studentów</p> </a>
 <a href="{% url 'webapp:write_notice' pk=group.pk %}"><p class="add-button">Notatka do grupy</p> </a>
-<a href="{% url 'webapp:thesis_pdf' pk=group.pk %}"><p class="add-button">generuj tematy prac</p> </a>
+<a href="{% url 'webapp:thesis_pdf' pk=group.pk %}"><p class="add-button">Generuj tematy prac</p> </a>
+    </div>
 </div>
 {% endfor %}
 

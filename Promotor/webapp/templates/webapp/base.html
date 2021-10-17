@@ -44,17 +44,17 @@
         {% if user.is_authenticated %}
         {% if user.profile.is_teacher%}
           <li> <a href="{% url 'webapp:teacher_detail' pk=user.pk %}">Profil</a> </li>
-          <li> <a href="{% url 'webapp:group_list' %}">grupy</a> </li>
-          <li >Powiadomienia  {% show_notifications %}</li>
+          <li> <a href="{% url 'webapp:group_list' %}">Grupy</a> </li>
+          <li ><a href="#"></a> Powiadomienia </a> {% show_notifications %}</li>
           {% else %}
             <li> <a href="{% url 'webapp:group_notice' pk=user.pk %}">Notatka grupowa</a> </li>
           <li> <a href="{% url 'webapp:student_detail' pk=user.pk %}">Profil</a> </li>
-            <li> <a href="{% url 'webapp:student2_message' %}">Wiadomośc do promotora</a> </li>
+            <li> <a href="{% url 'webapp:student2_message' %}">Wiadomość do promotora</a> </li>
           {% endif %}
 
-          <li> <a href="{% url 'webapp:logout' %}">Logout</a> </li>
+          <li> <a href="{% url 'webapp:logout' %}">Wyloguj</a> </li>
           {% else %}
-          <li><a class="head-left" href="{% url 'webapp:login' %}">Login</a></li>
+          <li><a class="head-left" href="{% url 'webapp:login' %}">Zaloguj</a></li>
         {% endif %}
       </ul>
     </div>

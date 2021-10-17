@@ -19,11 +19,11 @@
     <h1>Login</h1>
     <form action="{% url 'webapp:login' %}" method="post">
       {% csrf_token %}
-      <p>Username:</p>
+      <p>Login:</p>
       <input type="text" name="username" placeholder="Enter your username">
       <br>
       <br>
-      <p>Password:</p>
+      <p>Hasło:</p>
       <input type="password" name="password" placeholder="Enter password">
       <br>
       <br>

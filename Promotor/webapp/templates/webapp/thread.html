@@ -9,9 +9,9 @@
 	<div class="row">
 		<div class="card col-md-12 mt-5 p-3 shadow-sm">
 			{% if thread.receiver == request.user %}
-				<h5>@{{ thread.user }}</h5>
+				<h5>{{ thread.user.get_full_name }}</h5>
 			{% else %}
-				<h5>@{{ thread.receiver }}</h5>
+				<h5>{{ thread.receiver.get_full_name }}</h5>
 			{% endif %}
 		</div>
 	</div>
@@ -19,7 +19,7 @@
 	{% if message_list.all.count == 0 %}
 	<div class="row my-5">
 		<div class="col-md-12">
-			<p class="empty-text">No Messages</p>
+			<p class="empty-text">Brak wiadomości</p>
 		</div>
 	</div>
 	{% endif %}
@@ -32,7 +32,7 @@
 					<p>{{message.date}}</p>
 					<p>{{ message.body }}</p>
 					{% if message.file %}
-					<a href='{{ message.file.url }}' class="card-link">Download/View</a>
+					<a href='{{ message.file.url }}' class="card-link">Pobierz</a>
 					{% endif %}
 				</div>
 			{% elif message.receiver_user == request.user %}
@@ -40,7 +40,7 @@
 					<p>{{message.date}}</p>
 					<p>{{ message.body }}</p>
 					{% if message.file %}
-					<a href='{{ message.file.url }}' class="card-link">Download/View</a>
+					<a href='{{ message.file.url }}' class="card-link">Pobierz</a>
 					{% endif %}
 				</div>
 			{% endif %}
@@ -55,7 +55,7 @@
 				{{ form | crispy }}
 
 				<div class="d-grid gap-2 mt-3">
-					<button class="btn btn-light" type="submit">Send Message</button>
+					<button class="btn btn-light" type="submit">Wyślij wiadomość</button>
 				</div>
 			</form>
 		</div>

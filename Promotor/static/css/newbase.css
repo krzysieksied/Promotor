@@ -21,7 +21,7 @@
 .profile-box{
   width: 600px;
   margin-top: 20px;
-  background: #e91e63;
+  background: #d9b00d;
   position: absolute;
   padding: 15px;
   border-radius: 10%;
@@ -75,7 +75,7 @@
 .student-list{
   margin: 0;
   padding: 0;
-  background: url("/static/images/list-background.PNG");
+  background: #7FFFD4;
   background-size:auto;
   background-repeat: repeat;
   width: 100%;

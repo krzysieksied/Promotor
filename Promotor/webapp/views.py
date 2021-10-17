@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+import os
+import tempfile
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
@@ -11,9 +15,14 @@ from django.views.generic import DetailView
 from django.contrib.auth.models import User
 from django.http import FileResponse
 import io
+
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.pdfbase import pdfmetrics, ttfonts
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
-from reportlab.lib.units import inch
-from reportlab.lib.pagesizes import letter
+from reportlab.lib.units import inch, cm
+from reportlab.lib.pagesizes import letter, A4
+from reportlab.platypus import SimpleDocTemplate, Spacer, Paragraph
 
 from . import models
 from .forms import UserForm, ThreadForm, MessagesForm, NoticeForm, StudentProfileUpdateForm
@@ -83,6 +92,7 @@ def group_students_list(request, pk):
     return render(request, template, context)
 
 
+@login_required
 def group_list(request):
     teacher_group = Group.objects.filter(teacher=request.user.profile.Teacher).all()
     return render(request, 'webapp/teacher_group.html', {'teacher_group': teacher_group})
@@ -223,6 +233,7 @@ def group_notice(request, pk):
     return render(request, 'webapp/group_notice_list.html', {'student': student})
 
 
+@login_required
 def StudentUpdateView(request, pk):
     profile_updated = False
     student = get_object_or_404(models.Student, pk=pk)
@@ -237,36 +248,42 @@ def StudentUpdateView(request, pk):
     return render(request, 'webapp/student_update.html', {'profile_updated': profile_updated, 'form': form})
 
 
+@login_required
 def thesis_pdf(request, pk):
     teacher_group = get_object_or_404(models.Group, pk=pk)
     students_list = [student for student in teacher_group.students.all()]
-    buf = io.BytesIO()
 
-    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+    path = os.path.join(tempfile.mkdtemp(), 'dokument.pdf')
+    pdfmetrics.registerFont(TTFont('Vera', 'Vera.ttf'))
 
-    textob = c.beginText()
-    textob.setTextOrigin(inch, inch)
-    textob.setFont("Helvetica", 14)
-
+    doc = SimpleDocTemplate(path, pagesize=A4)
+    styles = getSampleStyleSheet()
+    story = [Spacer(1, 1 * cm)]
+    style = styles["Normal"]
+    style.fontName = 'Vera'
     lines = []
 
     for student in students_list:
-        lines.append(student.name)
+        a = student.user.user.first_name
+        b = student.user.user.last_name
+        lines.append(a + " " + b)
         lines.append(student.thesis)
         lines.append(" ")
 
     # Loop
     for line in lines:
-        textob.textLine(line)
+        p = Paragraph(line, style)
 
-    # Finish Up
-    c.drawText(textob)
-    c.showPage()
-    c.save()
-    buf.seek(0)
+        story.append(p)
+        story.append(Spacer(1, 1 * cm))
+
+    doc.build(story)
+
+    pdf = open(path, "rb")
 
     # Return something
-    return FileResponse(buf, as_attachment=True, filename='thesis.pdf')
+    return FileResponse(pdf, as_attachment=True, filename='dokument.pdf')
+    # FileResponse(buf, as_attachment=True, filename='thesis.pdf')
 
 
 class ThreadNotification(View):

@@ -20,13 +20,13 @@ class UserForm(UserCreationForm):
 class TeacherProfileForm(forms.ModelForm):
     class Meta:
         model = Teacher
-        fields = ['name', 'email']
+        fields = ['email']
 
 
 class StudentProfileForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['name', 'index', 'email']
+        fields = ['index', 'email']
 
 
 class MessageForm(forms.ModelForm):
@@ -48,9 +48,15 @@ class NoticeForm(forms.ModelForm):
     class Meta:
         model = GroupNotice
         fields = ['message']
+        labels = {
+            "message": "Wiadomość"
+        }
 
 
 class StudentProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = ['thesis']
+        labels = {
+            "thesis": "Temat"
+        }

@@ -26,7 +26,7 @@ ul li{
   margin: 0;
 }
 ul li:hover{
-  background: #e91e63;
+  background: #7ac236;
   display: block;
   margin-bottom: 0;
 }
@@ -107,7 +107,7 @@ ul li a
 }
 
 .use-content{
-  background: #e91e63;
+  background: #7ac236;
   padding: 20px;
   text-align: center;
   color: white;
@@ -226,7 +226,7 @@ ul li a
 }
 
 .social{
-  background: #e91e63;
+  background: #7ac236;
   padding:5%;
   color: white;
   text-align: center;
@@ -258,7 +258,7 @@ ul li a
 .social-icon:hover i{
   transform: scale(1.5);
   transition: 0.5s;
-  color: #e91e63;
+  color: #7ac236;
 }
 
 
@@ -315,7 +315,7 @@ ul li a
   margin-top: 30px;
   height:600px;
   width:400px;
-  background: #e91e63;
+  background: #7ac236;
   color: white;
   padding: 70px 100px;
   position: absolute;
@@ -425,7 +425,7 @@ ul li a
 
 .student-signup-form{
   margin-top: 2px;
-  background: #e91e63;
+  background: #7ac236;
   padding: 20px;
   padding-top: 3%;
   position: absolute;
@@ -490,7 +490,7 @@ ul li a
 /* SIGN UP PAGE ************************************************/
 
 .login-page .signup{
-  background: #e91e63;
+  background: #7ac236;
   height: 500px;
   width: 500px;
   margin-top: 10%;

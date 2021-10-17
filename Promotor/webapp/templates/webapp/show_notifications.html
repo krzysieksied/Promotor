@@ -4,7 +4,7 @@
 		{% for notification in notifications %}
 		{% if notification.thread %}
 				<div class="dropdown-item-parent">
-					<a href="{% url 'webapp:thread-notification' notification.pk notification.thread.pk %}">@{{ notification.from_user }} sent you a message</a>
+					<a href="{% url 'webapp:thread-notification' notification.pk notification.thread.pk %}">{{ notification.from_user.get_full_name }} wysłał wiadomość</a>
 					<span class="dropdown-item-close" onclick="removeNotification(`{% url 'webapp:notification-delete' notification.pk %}`, `{{ request.path }}`)">&times;</span>
 				</div>
 		{% endif %}
